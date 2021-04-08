@@ -7,8 +7,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import com.example.reddittest.R
 import com.example.reddittest.databinding.LandingFragmentBinding
+import com.example.reddittest.ui.main.ui.adapter.SearchImagesAdapter
 import com.example.reddittest.ui.main.utils.onQueryTextChanged
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -37,6 +39,26 @@ class LandingFragment : Fragment() {
         binding.button.setOnClickListener {
             findNavController().navigate(R.id.action_landingFragment_to_detailFragment)
         }
+
+        binding.landingRecycler.apply {
+            layoutManager = GridLayoutManager(context, 2)
+            adapter = context?.let {
+                SearchImagesAdapter().apply {
+                    clickCallback = {
+                        /*Navigation.findNavController(view)
+                            .navigate(R.id.action_mainFragment_to_galleryFragment, Bundle().apply {
+                                putSerializable(EXTRA_LISTA, list as? Serializable)
+                                putSerializable(EXTRA_CHILD, child)
+                            }*/
+                    }
+                }
+            }
+        }
+        lifecycleScope.launchWhenResumed {
+            viewModel.searchFlow.collect {
+                (binding.landingRecycler.adapter as SearchImagesAdapter).list = it
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -54,15 +76,6 @@ class LandingFragment : Fragment() {
 
         searchView.onQueryTextChanged {
             viewModel.searchQuery.value = it
-        }
-        lifecycleScope.launchWhenResumed {
-            viewModel.searchFlow.collect {
-                val stringBuilder = StringBuilder()
-                it.map {
-                    stringBuilder.append(it.data?.title)
-                }
-                binding.message.text = stringBuilder.toString()
-            }
         }
     }
 

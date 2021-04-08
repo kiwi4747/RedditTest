@@ -10,8 +10,8 @@ import kotlinx.coroutines.withContext
 
 object RemoteDataSource : DataSource {
 
-    private val BASEPATH_REDDIT = "https://www.reddit.com/"
-    private var redditInterface: SearchInterface =
+    private const val BASEPATH_REDDIT = "https://www.reddit.com/"
+    private var redditInterface =
         ServiceBuilder.buildService(SearchInterface::class.java, BASEPATH_REDDIT)
 
     override suspend fun searchByQuery(query: String): Flow<List<RedditQueryThread>> {
