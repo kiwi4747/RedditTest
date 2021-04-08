@@ -1,5 +1,6 @@
 package com.example.reddittest.ui.main.data
 
+import com.example.reddittest.ui.main.data.model.RedditQueryThread
 import kotlinx.coroutines.flow.Flow
 
 
@@ -9,5 +10,5 @@ interface DataSource {
     //read
     //update
     //delete
-    fun searchByQuery(query: String): Flow<String>
+    suspend fun searchByQuery(query: String): Flow<List<RedditQueryThread>>
 }

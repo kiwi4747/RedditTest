@@ -57,7 +57,11 @@ class LandingFragment : Fragment() {
         }
         lifecycleScope.launchWhenResumed {
             viewModel.searchFlow.collect {
-                binding.message.text = it
+                val stringBuilder = StringBuilder()
+                it.map {
+                    stringBuilder.append(it.data?.title)
+                }
+                binding.message.text = stringBuilder.toString()
             }
         }
     }
