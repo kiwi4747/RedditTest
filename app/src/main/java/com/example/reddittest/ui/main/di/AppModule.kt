@@ -1,7 +1,10 @@
 package com.example.reddittest.ui.main.di
 
 import android.content.Context
+import com.example.reddittest.ui.main.data.DataSource
+import com.example.reddittest.ui.main.data.IDataRepository
 import com.example.reddittest.ui.main.data.RedditRepository
+import com.example.reddittest.ui.main.data.RemoteDataSource
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -19,8 +22,17 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideRedditRepository(@ApplicationContext context: Context) =
-        RedditRepository(context)
+    fun provideRepository(
+        @ApplicationContext context: Context,
+        dataSource: DataSource
+    ): IDataRepository =
+        RedditRepository(context, dataSource)
+
+    @Singleton
+    @Provides
+    fun provideRemoteDataSource(): DataSource {
+        return RemoteDataSource
+    }
 
     @ApplicationScope
     @Provides

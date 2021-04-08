@@ -5,11 +5,13 @@ import android.view.*
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.reddittest.R
 import com.example.reddittest.databinding.LandingFragmentBinding
 import com.example.reddittest.ui.main.utils.onQueryTextChanged
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 
 @AndroidEntryPoint
 class LandingFragment : Fragment() {
@@ -21,9 +23,9 @@ class LandingFragment : Fragment() {
     private lateinit var searchView: SearchView
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
         _binding = LandingFragmentBinding.inflate(inflater, container, false)
         return binding.root
@@ -52,6 +54,11 @@ class LandingFragment : Fragment() {
 
         searchView.onQueryTextChanged {
             viewModel.searchQuery.value = it
+        }
+        lifecycleScope.launchWhenResumed {
+            viewModel.searchFlow.collect {
+                binding.message.text = it
+            }
         }
     }
 
