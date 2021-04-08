@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">RedditTest</string>
+
+
+    <string name="shall_exit">Are you sure you want to close this activity?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+</resources>
