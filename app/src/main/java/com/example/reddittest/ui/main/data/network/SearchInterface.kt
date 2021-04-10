@@ -8,7 +8,14 @@ import retrofit2.http.Query
 
 interface SearchInterface {
     @GET("r/{keyword}/new.json")
-    suspend fun getPositionByZip(
+    suspend fun searchThreadByQueryNew(
+        @Path("keyword") keyword: String?,
+        @Query("limit") elementPerPage: Int,
+        @Query("after") after: String? = null
+    ): RedditQueryResponse
+
+    @GET("r/{keyword}/top.json")
+    suspend fun searchThreadByQueryTop(
         @Path("keyword") keyword: String?,
         @Query("limit") elementPerPage: Int,
         @Query("after") after: String? = null

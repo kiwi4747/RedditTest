@@ -12,6 +12,7 @@ import com.example.reddittest.ui.main.data.model.RedditQueryThread
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -43,10 +44,4 @@ class LandingViewModel @Inject constructor(
         currentSearchResult = newResult
         return newResult
     }
-    init {
-        viewModelScope.launch {
-            currentQueryValue
-        }
-    }
-
 }

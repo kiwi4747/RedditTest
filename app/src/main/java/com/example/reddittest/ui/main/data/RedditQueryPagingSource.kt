@@ -17,12 +17,12 @@ class RedditQueryPagingSource(
         val position = params.key
         val apiQuery = query
         return try {
-            val response = service.getPositionByZip(apiQuery, 10, position)
-            val repos = response.body()?.data?.children ?: emptyList()
+            val response = service.searchThreadByQueryNew(apiQuery, 10, position)
+            val repos = response.data.children ?: emptyList()
             val nextKey = if (repos.isNullOrEmpty()) {
                 null
             } else {
-                response.body()?.data?.after
+                response.data.after
             }
             LoadResult.Page(repos, lastKey, nextKey)
         } catch (exception: IOException) {

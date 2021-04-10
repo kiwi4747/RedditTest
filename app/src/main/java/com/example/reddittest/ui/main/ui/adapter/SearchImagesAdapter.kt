@@ -37,7 +37,7 @@ class SearchImagesAdapter : PagingDataAdapter<RedditQueryThread, SearchImagesAda
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.setIsRecyclable(false)
+       // holder.setIsRecyclable(false)
         getItem(position)?.let { item ->
             if (item.data?.thumbnail != null) {
                 Glide.with(binding.root.context)
@@ -51,7 +51,7 @@ class SearchImagesAdapter : PagingDataAdapter<RedditQueryThread, SearchImagesAda
                         )
                     )
                     .placeholder(R.drawable.ic_cached)
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                     .apply(
                         RequestOptions()
                     )
