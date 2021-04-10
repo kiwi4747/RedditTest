@@ -20,7 +20,7 @@
     <TextView
         android:id="@+id/row_gallery_title"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:background="@drawable/shape_strokegrey"
         android:ellipsize="end"
         android:gravity="center"
@@ -28,9 +28,9 @@
         android:padding="8dp"
         android:singleLine="true"
         android:visibility="visible"
+        app:layout_constrainedHeight="true"
         app:layout_constraintBottom_toBottomOf="@id/row_gallery_image"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_default="wrap"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintVertical_bias="1" />
 

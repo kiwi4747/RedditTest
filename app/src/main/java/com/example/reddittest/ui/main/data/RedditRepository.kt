@@ -1,6 +1,7 @@
 package com.example.reddittest.ui.main.data
 
 import android.content.Context
+import androidx.paging.PagingData
 import com.example.reddittest.ui.main.data.model.RedditQueryThread
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
@@ -13,7 +14,7 @@ class RedditRepository @Inject constructor(
     private val remoteDataSource: DataSource
 ) : IDataRepository {
 
-    override suspend fun searchByQuery(query: String): Flow<List<RedditQueryThread>> {
+    override fun searchByQuery(query: String): Flow<PagingData<RedditQueryThread>> {
         return if(query.isNotEmpty()) remoteDataSource.searchByQuery(query) else emptyFlow()
     }
 }

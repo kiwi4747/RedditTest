@@ -13,7 +13,10 @@ import com.example.reddittest.databinding.LandingFragmentBinding
 import com.example.reddittest.ui.main.ui.adapter.SearchImagesAdapter
 import com.example.reddittest.ui.main.utils.onQueryTextChanged
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class LandingFragment : Fragment() {
@@ -23,7 +26,7 @@ class LandingFragment : Fragment() {
     private val viewModel: LandingViewModel by viewModels()
 
     private lateinit var searchView: SearchView
-
+    private var adapter: SearchImagesAdapter = SearchImagesAdapter()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -37,22 +40,31 @@ class LandingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
 
+        adapter.clickCallback = {
+            val action = LandingFragmentDirections.actionLandingFragmentToDetailFragment(
+                it
+            )
+            findNavController().navigate(action)
+        }
         binding.landingRecycler.apply {
             layoutManager = GridLayoutManager(context, 2)
-            adapter = context?.let {
-                SearchImagesAdapter().apply {
-                    clickCallback = {
-                        val action = LandingFragmentDirections.actionLandingFragmentToDetailFragment(
-                            it
-                        )
-                        findNavController().navigate(action)
-                    }
-                }
-            }
+            setAdapter(this@LandingFragment.adapter)
         }
-        lifecycleScope.launchWhenResumed {
-            viewModel.searchFlow.collect {
-                (binding.landingRecycler.adapter as SearchImagesAdapter).list = it
+        /* lifecycleScope.launchWhenResumed {
+             viewModel.searchFlow.collect {
+               //  (binding.landingRecycler.adapter as SearchImagesAdapter).list = it
+             }
+         }*/
+    }
+
+    private var searchJob: Job? = null
+
+    private fun search(query: String) {
+        // Make sure we cancel the previous job before creating a new one
+        searchJob?.cancel()
+        searchJob = lifecycleScope.launch {
+            viewModel.searchRepo(query).collectLatest {
+                adapter.submitData(it)
             }
         }
     }
@@ -64,14 +76,15 @@ class LandingFragment : Fragment() {
         val searchItem = menu.findItem(R.id.action_search)
         searchView = searchItem.actionView as SearchView
 
-        val pendingQuery = viewModel.searchQuery.value
+        val pendingQuery = viewModel.currentQueryValue
         if (pendingQuery != null && pendingQuery.isNotEmpty()) {
             searchItem.expandActionView()
             searchView.setQuery(pendingQuery, false)
         }
 
         searchView.onQueryTextChanged {
-            viewModel.searchQuery.value = it
+            viewModel.currentQueryValue = it
+            search(it)
         }
     }
 

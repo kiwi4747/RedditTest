@@ -16,5 +16,7 @@ data class RedditQueryDataInside(
 ) : Serializable
 
 data class RedditQueryThread(val data: RedditQueryDataInside? = null) : Serializable
-data class RedditQueryBodyResponse(val children: ArrayList<RedditQueryThread>?) : Serializable
+data class RedditQueryBodyResponse(val children: List<RedditQueryThread>?, val after: String?) :
+    Serializable
+
 data class RedditQueryResponse(val data: RedditQueryBodyResponse) : Serializable
