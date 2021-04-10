@@ -36,20 +36,16 @@ class LandingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
-        binding.button.setOnClickListener {
-            findNavController().navigate(R.id.action_landingFragment_to_detailFragment)
-        }
 
         binding.landingRecycler.apply {
             layoutManager = GridLayoutManager(context, 2)
             adapter = context?.let {
                 SearchImagesAdapter().apply {
                     clickCallback = {
-                        /*Navigation.findNavController(view)
-                            .navigate(R.id.action_mainFragment_to_galleryFragment, Bundle().apply {
-                                putSerializable(EXTRA_LISTA, list as? Serializable)
-                                putSerializable(EXTRA_CHILD, child)
-                            }*/
+                        val action = LandingFragmentDirections.actionLandingFragmentToDetailFragment(
+                            it
+                        )
+                        findNavController().navigate(action)
                     }
                 }
             }

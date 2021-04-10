@@ -11,7 +11,8 @@ data class RedditQueryDataInside(
     @SerializedName(value = "title")
     val title: String? = null,
     @SerializedName(value = "subreddit_name_prefixed")
-    val namePrefixed: String? = null
+    val namePrefixed: String? = null,
+    val url: String? = null
 ) : Serializable
 
 data class RedditQueryThread(val data: RedditQueryDataInside? = null) : Serializable

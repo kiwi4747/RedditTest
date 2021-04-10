@@ -18,5 +18,10 @@
         android:id="@+id/detailFragment"
         tools:layout="@layout/detail_fragment"
         android:name="com.example.reddittest.ui.main.ui.detail.DetailFragment"
-        android:label="DetailFragment" />
+        android:label="DetailFragment" >
+        <argument
+            android:name="reddit_thread"
+            android:defaultValue="@null"
+            app:argType="com.example.reddittest.ui.main.data.model.RedditQueryThread"
+            app:nullable="true" /></fragment>
 </navigation>
