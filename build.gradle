@@ -26,6 +26,7 @@ buildscript {
         roomVersion = "2.2.5"
         testExtJunitVersion = "1.1.2"
         pagingVersion = '3.0.0-beta01'
+        workManagerVersion = "2.5.0"
     }
 
     repositories {
