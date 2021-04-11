@@ -6,6 +6,7 @@ import com.example.reddittest.ui.main.data.DataSource
 import com.example.reddittest.ui.main.data.IDataRepository
 import com.example.reddittest.ui.main.data.RedditRepository
 import com.example.reddittest.ui.main.data.RemoteDataSource
+import com.example.reddittest.ui.main.data.datastore.UserPreferencesRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -28,6 +29,11 @@ object AppModule {
         dataSource: DataSource
     ): IDataRepository =
         RedditRepository(context, dataSource)
+
+    @Singleton
+    @Provides
+    fun provideUserPreferencesRepository(@ApplicationContext context: Context) =
+        UserPreferencesRepository(context)
 
     @Singleton
     @Provides

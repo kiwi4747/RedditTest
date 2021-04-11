@@ -13,8 +13,8 @@ import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.reddittest.R
 import com.example.reddittest.databinding.LandingFragmentBinding
-import com.example.reddittest.ui.main.ui.adapter.RedditThreadLoadStateAdapter
 import com.example.reddittest.ui.main.ui.adapter.RedditThreadGalleryAdapter
+import com.example.reddittest.ui.main.ui.adapter.RedditThreadLoadStateAdapter
 import com.example.reddittest.ui.main.utils.hideKeyboard
 import com.example.reddittest.ui.main.utils.onQueryTextChanged
 import dagger.hilt.android.AndroidEntryPoint
@@ -56,6 +56,11 @@ class LandingFragment : Fragment() {
                 // Only react to cases where Remote REFRESH completes i.e., NotLoading.
                 .filter { it.refresh is LoadState.NotLoading }
                 .collect { binding.landingRecycler.scrollToPosition(0) }
+        }
+        lifecycleScope.launch {
+            viewModel.currentQueryValue.collectLatest {
+                search(it)
+            }
         }
     }
 
@@ -101,10 +106,6 @@ class LandingFragment : Fragment() {
             )
         }
 
-        /*adapter.withLoadStateHeaderAndFooter(
-            header = RedditThreadLoadStateAdapter { adapter.retry() },
-            footer = RedditThreadLoadStateAdapter { adapter.retry() }
-        )*/
         binding.retryButton.setOnClickListener { adapter.retry() }
     }
 
@@ -132,14 +133,14 @@ class LandingFragment : Fragment() {
         val searchItem = menu.findItem(R.id.action_search)
         searchView = searchItem.actionView as SearchView
 
-        val pendingQuery = viewModel.currentQueryValue
-        if (pendingQuery != null && pendingQuery.isNotEmpty()) {
+        val pendingQuery = viewModel.currentQueryValue.value
+        if (pendingQuery.isNotEmpty()) {
             searchItem.expandActionView()
             searchView.setQuery(pendingQuery, false)
         }
 
         searchView.onQueryTextChanged {
-            search(it)
+            viewModel.setCurrentQuery(it)
             hideKeyboard()
         }
     }
