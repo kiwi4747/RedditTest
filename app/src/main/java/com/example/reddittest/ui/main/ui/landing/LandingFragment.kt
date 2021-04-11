@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.reddittest.R
 import com.example.reddittest.databinding.LandingFragmentBinding
 import com.example.reddittest.ui.main.ui.adapter.RedditThreadLoadStateAdapter
-import com.example.reddittest.ui.main.ui.adapter.SearchImagesAdapter
+import com.example.reddittest.ui.main.ui.adapter.RedditThreadGalleryAdapter
 import com.example.reddittest.ui.main.utils.hideKeyboard
 import com.example.reddittest.ui.main.utils.onQueryTextChanged
 import dagger.hilt.android.AndroidEntryPoint
@@ -33,7 +33,7 @@ class LandingFragment : Fragment() {
     private val viewModel: LandingViewModel by viewModels()
 
     private lateinit var searchView: SearchView
-    private var adapter: SearchImagesAdapter = SearchImagesAdapter()
+    private var adapter: RedditThreadGalleryAdapter = RedditThreadGalleryAdapter()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -139,7 +139,6 @@ class LandingFragment : Fragment() {
         }
 
         searchView.onQueryTextChanged {
-            //   viewModel.currentQueryValue = it
             search(it)
             hideKeyboard()
         }

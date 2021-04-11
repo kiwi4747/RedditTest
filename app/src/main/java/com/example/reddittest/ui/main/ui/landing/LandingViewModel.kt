@@ -22,13 +22,6 @@ class LandingViewModel @Inject constructor(
     @Assisted private val state: SavedStateHandle
 ) : ViewModel() {
 
-    // val searchQuery = state.getLiveData("searchQuery", "")
-//
-    // val searchFlow = searchQuery.asFlow<String>().flatMapLatest {query->
-    //     repository.searchByQuery(query)
-    // }
-
-
     var currentQueryValue: String? = state.getLiveData("searchQuery", "").value
 
     private var currentSearchResult: Flow<PagingData<RedditQueryThread>>? = null

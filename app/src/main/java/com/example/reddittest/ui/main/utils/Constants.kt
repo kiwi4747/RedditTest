@@ -13,6 +13,6 @@ const val NOTIFICATION_ID = 1
 const val IMAGE_MANIPULATION_WORK_NAME = "image_manipulation_work"
 
 
-const val OUTPUT_PATH = "blur_filter_outputs"
+const val OUTPUT_PATH = "file_outputs"
 const val KEY_IMAGE_URL = "KEY_IMAGE_URL"
 const val TAG_OUTPUT = "OUTPUT"

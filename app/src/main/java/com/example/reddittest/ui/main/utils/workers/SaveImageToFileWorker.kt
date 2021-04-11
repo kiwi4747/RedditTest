@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.provider.MediaStore
+import android.util.Log
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
@@ -16,15 +17,14 @@ import java.util.*
  */
 class SaveImageToFileWorker(ctx: Context, params: WorkerParameters) : Worker(ctx, params) {
 
-    private val Title = "Blurred Image"
+    private val Title = "Image"
     private val dateFormatter = SimpleDateFormat(
         "yyyy.MM.dd 'at' HH:mm:ss z",
         Locale.getDefault()
     )
 
     override fun doWork(): Result {
-        // Makes a notification when the work starts and slows down the work so that
-        // it's easier to see each WorkRequest start, even on emulated devices
+        // Makes a notification when the work starts
         makeStatusNotification("Saving image", applicationContext)
 
         val resolver = applicationContext.contentResolver
@@ -39,13 +39,15 @@ class SaveImageToFileWorker(ctx: Context, params: WorkerParameters) : Worker(ctx
             if (!imageUrl.isNullOrEmpty()) {
                 val output = workDataOf(KEY_IMAGE_URL to imageUrl)
 
+                makeStatusNotification("Image saved!", applicationContext)
                 Result.success(output)
             } else {
-                //  Timber.e("Writing to MediaStore failed")
+                Log.e("SaveImageToFileWorker", "failure saving image")
                 Result.failure()
             }
         } catch (exception: Exception) {
             // Timber.e(exception)
+            Log.e("SaveImageToFileWorker", exception.message ?: "exception")
             Result.failure()
         }
     }
