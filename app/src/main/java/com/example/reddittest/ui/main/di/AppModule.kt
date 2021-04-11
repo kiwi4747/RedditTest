@@ -1,6 +1,7 @@
 package com.example.reddittest.ui.main.di
 
 import android.content.Context
+import androidx.work.WorkManager
 import com.example.reddittest.ui.main.data.DataSource
 import com.example.reddittest.ui.main.data.IDataRepository
 import com.example.reddittest.ui.main.data.RedditRepository
@@ -32,6 +33,14 @@ object AppModule {
     @Provides
     fun provideRemoteDataSource(): DataSource {
         return RemoteDataSource
+    }
+
+    @Singleton
+    @Provides
+    fun provideWorkManager(
+        @ApplicationContext context: Context
+    ): WorkManager {
+        return WorkManager.getInstance(context)
     }
 
     @ApplicationScope

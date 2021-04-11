@@ -22,10 +22,10 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailViewModel @Inject constructor(
     application: Application,
-    @Assisted private val state: SavedStateHandle
+    private val workManager: WorkManager,
+    @Assisted private val state: SavedStateHandle,
 ) :
     ViewModel() {
-    private val workManager = WorkManager.getInstance(application)
     internal var imageUrl: String? = null
     fun setImage(it: String?) {
         imageUrl = it
