@@ -1,14 +1,18 @@
 package com.example.reddittest.ui.main.utils.workers
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.net.Uri
 import android.provider.MediaStore
 import android.util.Log
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
 import com.example.reddittest.ui.main.utils.KEY_IMAGE_URL
+import java.io.ByteArrayOutputStream
+import java.io.IOException
+import java.io.InputStream
+import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -29,12 +33,26 @@ class SaveImageToFileWorker(ctx: Context, params: WorkerParameters) : Worker(ctx
 
         val resolver = applicationContext.contentResolver
         return try {
-            val resourceUri = inputData.getString(KEY_IMAGE_URL)
-            val bitmap = BitmapFactory.decodeStream(
-                resolver.openInputStream(Uri.parse(resourceUri))
-            )
+            val resourceUrl = inputData.getString(KEY_IMAGE_URL)
+
+            val bitmap: Bitmap?
+            try {
+                val inputStream: InputStream = URL(resourceUrl).openStream()
+                bitmap = BitmapFactory.decodeStream(inputStream)
+            } catch (e: IOException) {
+                throw IllegalArgumentException("Invalid input url")
+            }
+
+            val stream = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, stream)
+
+            val byteArray = stream.toByteArray()
+
+            // Finally, return the compressed bitmap
+            val compressedBitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
+
             val imageUrl = MediaStore.Images.Media.insertImage(
-                resolver, bitmap, Title, dateFormatter.format(Date())
+                resolver, compressedBitmap, Title, dateFormatter.format(Date())
             )
             if (!imageUrl.isNullOrEmpty()) {
                 val output = workDataOf(KEY_IMAGE_URL to imageUrl)

@@ -3,20 +3,17 @@ package com.example.reddittest.ui.main.utils.workers
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
-import android.graphics.*
-import android.media.ExifInterface
-import android.net.Uri
+import android.graphics.BitmapFactory
 import android.os.Build
-import android.renderscript.*
-import android.util.Log
-import androidx.annotation.WorkerThread
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.work.Data
 import com.example.reddittest.R
 import com.example.reddittest.ui.main.utils.*
-import java.io.*
+import java.io.File
+import java.io.IOException
+import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.jvm.Throws
 
 
 /**
@@ -60,74 +57,13 @@ fun makeStatusNotification(message: String, context: Context) {
 }
 
 /**
- * Blurs the given Bitmap image
- * @param bitmap Image to blur
- * @param applicationContext Application context
- * @return Blurred bitmap image
+ * Creates the input data bundle which includes the Uri to operate on
+ * @return Data which contains the Image Uri as a String
  */
-@WorkerThread
-fun compressBitmap(bitmap: Bitmap, applicationContext: Context): Bitmap {
-    lateinit var rsContext: RenderScript
-    try {
-
-        /* val stream = ByteArrayOutputStream()
-         bitmap.compress(Bitmap.CompressFormat.JPEG, 30, stream)
-
-         val byteArray = stream.toByteArray()
-
-         // Finally, return the compressed bitmap
-         val output = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
- */
-        // Create the output bitmap
-        val output = Bitmap.createBitmap(
-            bitmap.width, bitmap.height, bitmap.config
-        )
-        //todo omg don't blur just compress
-        // Blur the image
-        rsContext = RenderScript.create(applicationContext, RenderScript.ContextType.DEBUG)
-        val inAlloc = Allocation.createFromBitmap(rsContext, bitmap)
-        val outAlloc = Allocation.createTyped(rsContext, inAlloc.type)
-        val theIntrinsic = ScriptIntrinsicBlur.create(rsContext, Element.U8_4(rsContext))
-        theIntrinsic.apply {
-            setRadius(10f)
-            theIntrinsic.setInput(inAlloc)
-            theIntrinsic.forEach(outAlloc)
-        }
-        outAlloc.copyTo(output)
-
-        return output
-    } finally {
-        rsContext.finish()
+fun createInputDataForUri(imageUrl: String): Data {
+    val builder = Data.Builder()
+    imageUrl?.let {
+        builder.putString(KEY_IMAGE_URL, imageUrl)
     }
-}
-
-/**
- * Writes bitmap to a temporary file and returns the Uri for the file
- * @param applicationContext Application context
- * @param bitmap Bitmap to write to temp file
- * @return Uri for temp file with bitmap
- * @throws FileNotFoundException Throws if bitmap file cannot be found
- */
-@Throws(FileNotFoundException::class)
-fun writeBitmapToFile(applicationContext: Context, bitmap: Bitmap): Uri {
-    val name = String.format("compressed-%s.png", UUID.randomUUID().toString())
-    val outputDir = File(applicationContext.filesDir, OUTPUT_PATH)
-    if (!outputDir.exists()) {
-        outputDir.mkdirs() // should succeed
-    }
-    val outputFile = File(outputDir, name)
-    var out: FileOutputStream? = null
-    try {
-        out = FileOutputStream(outputFile)
-        bitmap.compress(Bitmap.CompressFormat.PNG, 0 /* ignored for PNG */, out)
-    } finally {
-        out?.let {
-            try {
-                it.close()
-            } catch (ignore: IOException) {
-            }
-
-        }
-    }
-    return Uri.fromFile(outputFile)
+    return builder.build()
 }
