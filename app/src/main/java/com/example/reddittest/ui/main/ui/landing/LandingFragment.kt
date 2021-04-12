@@ -67,7 +67,7 @@ class LandingFragment : Fragment() {
     private fun initAdapter() {
         adapter.clickCallback = {
             val action = LandingFragmentDirections.actionLandingFragmentToDetailFragment(
-                it
+                redditThread = it
             )
             findNavController().navigate(action)
         }

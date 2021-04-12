@@ -1,7 +1,5 @@
 package com.example.reddittest.ui.main.ui.landing
 
-import androidx.hilt.Assisted
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
@@ -21,8 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class LandingViewModel @Inject constructor(
     private val userPreferencesRepository: UserPreferencesRepository,
-    private val repository: IDataRepository,
-    @Assisted private val state: SavedStateHandle
+    private val repository: IDataRepository
 ) : ViewModel() {
 
     private var _currentQueryValue = MutableStateFlow("")

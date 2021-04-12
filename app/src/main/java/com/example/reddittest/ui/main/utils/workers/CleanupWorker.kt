@@ -7,7 +7,7 @@ import com.example.reddittest.ui.main.utils.OUTPUT_PATH
 import java.io.File
 
 /**
- * Cleans up temporary files generated during blurring process
+ * Cleans up temporary files generated
  */
 class CleanupWorker(ctx: Context, params: WorkerParameters) : Worker(ctx, params) {
 
@@ -23,16 +23,14 @@ class CleanupWorker(ctx: Context, params: WorkerParameters) : Worker(ctx, params
                 if (entries != null) {
                     for (entry in entries) {
                         val name = entry.name
-                        if (name.isNotEmpty() && name.endsWith(".png")) {
+                        if (name.isNotEmpty() && name.endsWith(".jpg")) {
                             val deleted = entry.delete()
-                            //Timber.i("Deleted $name - $deleted")
                         }
                     }
                 }
             }
             Result.success()
         } catch (exception: Exception) {
-            // Timber.e(exception)
             Result.failure()
         }
     }

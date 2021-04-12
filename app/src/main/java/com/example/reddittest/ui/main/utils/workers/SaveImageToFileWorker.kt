@@ -64,7 +64,6 @@ class SaveImageToFileWorker(ctx: Context, params: WorkerParameters) : Worker(ctx
                 Result.failure()
             }
         } catch (exception: Exception) {
-            // Timber.e(exception)
             Log.e("SaveImageToFileWorker", exception.message ?: "exception")
             Result.failure()
         }

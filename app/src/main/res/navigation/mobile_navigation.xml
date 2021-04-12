@@ -9,19 +9,19 @@
         android:id="@+id/landingFragment"
         android:name="com.example.reddittest.ui.main.ui.landing.LandingFragment"
         android:label="landing_fragment"
-        tools:layout="@layout/landing_fragment" >
+        tools:layout="@layout/landing_fragment">
         <action
             android:id="@+id/action_landingFragment_to_detailFragment"
             app:destination="@id/detailFragment" />
     </fragment>
     <fragment
         android:id="@+id/detailFragment"
-        tools:layout="@layout/detail_fragment"
         android:name="com.example.reddittest.ui.main.ui.detail.DetailFragment"
-        android:label="DetailFragment" >
+        android:label="DetailFragment"
+        tools:layout="@layout/detail_fragment">
         <argument
             android:name="reddit_thread"
-            android:defaultValue="@null"
             app:argType="com.example.reddittest.ui.main.data.model.RedditQueryThread"
-            app:nullable="true" /></fragment>
+            app:nullable="false" />
+    </fragment>
 </navigation>

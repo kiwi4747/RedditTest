@@ -1,9 +1,7 @@
 package com.example.reddittest.ui.main.ui.detail
 
 import android.app.Application
-import androidx.hilt.Assisted
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.work.*
 import com.example.reddittest.ui.main.data.model.RedditQueryThread
@@ -19,11 +17,15 @@ import javax.inject.Inject
 class DetailViewModel @Inject constructor(
     application: Application,
     private val workManager: WorkManager,
-    @Assisted private val state: SavedStateHandle,
 ) :
     ViewModel() {
 
-    val redditThread = state.get<RedditQueryThread>("reddit_thread")
+    var redditThread: RedditQueryThread? = null
+    private set
+
+    fun bindData(redditQueryThread: RedditQueryThread) {
+        redditThread = redditQueryThread
+    }
 
     private var imageUrl: String? = null
 
