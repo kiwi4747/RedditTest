@@ -1,5 +1,7 @@
 package com.example.reddittest.ui.main.ui.landing
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
@@ -11,8 +13,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,8 +23,8 @@ class LandingViewModel @Inject constructor(
     private val repository: IDataRepository
 ) : ViewModel() {
 
-    private var _currentQueryValue = MutableStateFlow("")
-    val currentQueryValue: MutableStateFlow<String> = _currentQueryValue
+    private var _currentQueryValue = MutableLiveData("")
+    val currentQueryValue: LiveData<String> = _currentQueryValue
     fun setCurrentQuery(queryString: String) {
         CoroutineScope(Dispatchers.IO).launch {
             userPreferencesRepository.setLastQuery(queryString)
@@ -35,8 +36,8 @@ class LandingViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            userPreferencesRepository.lastQueryFlow.collect {
-                _currentQueryValue.value = it
+            userPreferencesRepository.lastQueryFlow.collectLatest {
+                _currentQueryValue.postValue(it)
             }
         }
     }

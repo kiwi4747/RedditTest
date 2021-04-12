@@ -21,10 +21,12 @@ class DetailViewModel @Inject constructor(
     ViewModel() {
 
     var redditThread: RedditQueryThread? = null
-    private set
+        private set
 
     fun bindData(redditQueryThread: RedditQueryThread) {
         redditThread = redditQueryThread
+        outputWorkInfos =
+            workManager.getWorkInfosByTagLiveData("${TAG_OUTPUT}_${redditThread?.data?.id}")
     }
 
     private var imageUrl: String? = null
@@ -35,8 +37,7 @@ class DetailViewModel @Inject constructor(
 
     // This transformation makes sure that whenever the current work Id changes the WorkInfo
     // the UI is listening to changes
-    val outputWorkInfos: LiveData<List<WorkInfo>> =
-        workManager.getWorkInfosByTagLiveData(TAG_OUTPUT)
+    lateinit var outputWorkInfos: LiveData<List<WorkInfo>>
 
 
     fun saveImage() {
@@ -57,7 +58,7 @@ class DetailViewModel @Inject constructor(
             // Add WorkRequest to save the image to the filesystem
             val save = OneTimeWorkRequestBuilder<SaveImageToFileWorker>()
                 .setConstraints(constraints)
-                .addTag(TAG_OUTPUT)
+                .addTag("${TAG_OUTPUT}_${redditThread?.data?.id}")
                 .setInputData(createInputDataForUri(url))
                 .build()
             continuation = continuation.then(save)
