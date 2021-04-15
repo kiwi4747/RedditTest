@@ -53,27 +53,8 @@ dependencies {
     androidTestImplementation "androidx.test.ext:junit:$testExtJunitVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion"
 
-
-    def room_version = "2.2.6"
-
-    implementation "androidx.room:room-runtime:$room_version"
-    kapt "androidx.room:room-compiler:$room_version"
-
-    // optional - Kotlin Extensions and Coroutines support for Room
-    implementation "androidx.room:room-ktx:$room_version"
-
-    // optional - Test helpers
-    testImplementation "androidx.room:room-testing:$room_version"
-
-    //kotlin
-    implementation "org.jetbrains.kotlin:kotlin-reflect:1.4.31"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.1"
-
     //gson
     implementation 'com.google.code.gson:gson:2.8.6'
-
-    //flexbox
-    implementation 'com.google.android:flexbox:2.0.1'
 
     // Glide
     implementation "com.github.bumptech.glide:glide:4.12.0"
@@ -90,11 +71,6 @@ dependencies {
     implementation "androidx.navigation:navigation-fragment-ktx:$navigationVersion"
     implementation "androidx.navigation:navigation-ui-ktx:$navigationVersion"
 
-    // Room
-    implementation "androidx.room:room-runtime:$roomVersion"
-    kapt "androidx.room:room-compiler:$roomVersion"
-    implementation "androidx.room:room-ktx:$roomVersion"
-
     // Coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
@@ -107,11 +83,6 @@ dependencies {
 
     // DataStore
     implementation "androidx.datastore:datastore-preferences:$dataStoreVersion"
-
-    //biometric
-    implementation "androidx.biometric:biometric:1.1.0"
-    implementation "androidx.biometric:biometric:1.2.0-alpha03"
-
 
     //retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.8.2'
